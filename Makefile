@@ -2,7 +2,8 @@
 CCO       = -interaction nonstopmode
 CCS       = > /dev/null
 CC        = pdflatex ${CCO} $< ${CCS}
-SOURCE    = cible.pdf
+SOURCE    = $(wildcard *.tex)
+CIBLE     = $(patsubst %.tex,%.pdf,${SOURCE})
 
 .PHONY:all force clean mrpropre
 all: force ${SOURCE} clean
@@ -15,13 +16,13 @@ all: force ${SOURCE} clean
 
 force:
 	@echo "Force la compilation des cibles : ${SOURCE}"
-	@touch $(patsubst %.pdf, %.tex, ${SOURCE})
+	@touch ${SOURCE}
 
 clean:
 	find . -iregex ".*\.\(aux\|log\|toc\|dvi\|ps\|out\)" -delete
 	@echo "Fichiers temporaires supprimés"
 
 mrpropre: clean
-	@rm -vf ${SOURCE}
+	@rm -vf ${CIBLE}
 	@echo "Fichiers cibles supprimés"
 
